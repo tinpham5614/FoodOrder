@@ -23,6 +23,7 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodIt
     public FoodItemAdapter(ArrayList<Food> foodItems,Context context) {
         this.foodItems = foodItems;
         this.context = context;
+
     }
 
     @NonNull
@@ -30,6 +31,7 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodIt
     public FoodItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new FoodItemViewHolder(LayoutInflater.from(context)
                 .inflate(R.layout.list_item_layout,parent,false));
+
     }
 
     @Override
@@ -38,11 +40,14 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodIt
         holder.foodImageView.setImageResource(food.getDrawableId());
         holder.foodTitleTextView.setText(String.format(Locale.ENGLISH,"%s $%.2f",
                 food.getFoodTitle(),food.getCost()));
+
         //setting the click listener to the order Button
         holder.orderButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 int count = Integer.parseInt(holder.orderCountTextView.getText().toString());
+
                 if(count != 0) {
                     String out = String.format(Locale.ENGLISH,
                             "Your food will arrive in 2 minutes!\nOrder: %s      Quantity: %d       Price: $%.2f",
@@ -51,7 +56,10 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodIt
                     //displaying a Snackbar to show th order status
                     Snackbar.make(v,out,Snackbar.LENGTH_LONG).show();
                     holder.orderCountTextView.setText("0");
-                }else{
+                    int totalCount = Integer.parseInt(holder.totalCount.getText().toString());
+                    holder.totalCount.setText(String.valueOf(totalCount+count));
+                }
+                else{
                     Snackbar.make(v,"Please add your food!",
                             Snackbar.LENGTH_LONG).show();
                 }
@@ -84,6 +92,8 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodIt
         return foodItems.size();
     }
 
+
+
     public static class FoodItemViewHolder extends RecyclerView.ViewHolder{
         public final ImageView foodImageView;
         public final TextView foodTitleTextView;
@@ -91,6 +101,7 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodIt
         public final TextView increaseButton;
         public final TextView decreaseButton;
         public final TextView orderCountTextView;
+        private final TextView totalCount;
 
         public FoodItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,6 +111,11 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodIt
             increaseButton = itemView.findViewById(R.id.order_increase);
             decreaseButton = itemView.findViewById(R.id.order_decrease);
             orderCountTextView = itemView.findViewById(R.id.order_count);
+            totalCount = itemView.findViewById(R.id.total_count);
+
         }
+
     }
+
+
 }
